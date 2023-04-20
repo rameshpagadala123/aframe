@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="shortcut icon" href="#" />
+    <title>Blippar WebAR SDK</title>
+
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+
+    <!-- Step 1: Include WebAR SDK script -->
+    <!-- PS: User may overload the splash screen by passing function string to on-load parameter
+         e.g. on-load = "LoadMySplash()" -->
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.0/aframe/build/aframe-ar.js"
+      on-load=""
+      webar-mode="surface-tracking"
+      debug-mode="false"
+      auto-init="false"
+      auto-start="true"
+      static-camera="true"
+      logo-src="images/test_logo_here.png"
+      logo-width="116px"
+      logo-height="116px"
+      progress-dot-ring-scale="0.30"
+      progress-dot-ring-color="#00AAFF"
+      progress-ring-scale="0.36"
+      progress-ring-color="#00FFFF"
+      progress-ring-line-width="5"
+
+      alert-border-color="#00FFFF"
+      alert-border-width="5px"
+      alert-background-color="#283747"
+      alert-message-text-color="#00AAFF"
+      alert-button-color="#00FFFF"
+      alert-button-text-color="#283747"
+      alert-button-height="50px"
+      alert-camera-permission-text="We need to ask for access to the camera so this experience can work!!!"
+      alert-camera-permission-button-text="No Problem"
+      alert-motion-permission-text="Now we need access to motion sensors!!!"
+      alert-motion-permission-button-text="No Problem"
+      alert-box-width="290px"
+      alert-box-height="182px"
+      alert-box-font-size="24px"
+
+      ui-background-color="#283747"
+      ui-text-color="#00FFFF"
+      ui-portrait-text="This experience is optimised for portrait display only"
+      desktop-logo-src="images/test_desktop_logo.png"
+      desktop-logo-width="108px"
+      desktop-logo-height="30px"
+      issue-img-src="images/test_issue_img.png"
+      issue-img-width="116px"
+      issue-img-height="116px"
+      show-guide-view="true"
+      show-guide-animation-url=""></script>
+
+  </head>
+
+  <body>
+
+    <!-- Step 2: Add webar-scene attribute to AFrame's <a-scene> tag -->
+      <!-- Provide a valid Blippar license-key value in the key: property  -->
+    <a-scene
+      webar-scene="key: xxxxxxxx-1111-2222-3333-yyyyyyyyyyyy"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      loading-screen="enabled: false"
+      renderer="colorManagement: true;">
+
+      <!-- Step 3: Add webar-camera attribute to AFrame's <a-entity camera> tag -->
+      <a-camera webar-camera></a-camera>
+
+      <a-assets timeout="60000">
+        <a-asset-item id="testmodel" src="models/astronaut.glb"></a-asset-item>
+      </a-assets>
+
+
+      <!-- Step 4: Add webar-stage attribute to an AFrame's parent <a-entity> tag -->
+      <a-entity webar-stage>
+
+        <!-- Step 5: Add AR models under the webar-stage node -->
+          <!-- Add webar-loadmonitor attribute to the entities to display loading progress screen before starting the surface tracking -->
+          <!-- Refer API Reference documentation for more details -->
+          <a-entity gltf-model="#testmodel" id="testmodel_1" rotation="0 0 0" position="0 0 0" scale="0.25 0.25 0.25" webar-loadmonitor="elType: glb"></a-entity>
+      </a-entity>
+
+    </a-scene>
+
+    <!-- Refer API:Functions documentation for more details -->
+    <script>
+      WEBARSDK.Init();
+
+      // Sets the webar mode if not defined earlier or enable lazy mode in webar-mode parameter
+      // WEBARSDK.SetWebARMode("surface-tracking");
+      
+      // Give a callback when the WebAR Stage <a-entity webar-stage> is ready  to display the 3d object
+      WEBARSDK.SetStageReadyCallback(() => {
+        console.info('Stage is ready now!!!');
+      });
+
+      WEBARSDK.SetGuideViewCallbacks(
+        startGuideViewCallback = () => {
+          console.log(" Start(ed) hand guide animation");
+        },
+
+        stopGuideViewCallback = () => {
+          console.log(" Stop(ped) hand guide animation");
+        }
+      );
+    </script>
+  </body>
+</html>
